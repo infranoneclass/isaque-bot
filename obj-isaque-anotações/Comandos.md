@@ -1,0 +1,8 @@
+- tags
+- auto-ban
+	- se postar no canal ID `1559905930773274634` toma ban
+- sorteios
+	- `!!megasorteio [cargo] <tempo> <quantidade> <prêmio...>`
+		- Exemplo `!!megasorteio @community 5d 3 keys de shelldiver`
+	- depois de X tempo, o bot sorteia Y quantidade de pessoas que reagiram à mensagem original
+	- a mensagem é padrão

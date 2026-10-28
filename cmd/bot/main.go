@@ -9,7 +9,10 @@ import (
 	"github.com/diamondburned/arikawa/v3/api/cmdroute"
 	"github.com/diamondburned/arikawa/v3/gateway"
 	"github.com/diamondburned/arikawa/v3/state"
-	"github.com/diamondburned/arikawa/v3/utils/json/option"
+	adapter "github.com/infranoneclass/isaque-bot/internal/adapter/message_adapter"
+	pingcommand "github.com/infranoneclass/isaque-bot/internal/command/ping"
+	pinghandler "github.com/infranoneclass/isaque-bot/internal/handler/ping"
+
 	"github.com/joho/godotenv"
 )
 
@@ -22,10 +25,7 @@ func main() {
 	initEnv()
 
 	r := cmdroute.NewRouter()
-
-	r.AddFunc("ping", func(ctx context.Context, data cmdroute.CommandData) *api.InteractionResponseData {
-		return &api.InteractionResponseData{Content: option.NewNullableString("Pong!")}
-	})
+	registerCommands(r)
 
 	s := state.New("Bot " + os.Getenv("BOT_PRIVATE_TOKEN"))
 
@@ -50,4 +50,14 @@ func initEnv() {
 			log.Fatal("Error loading .env file")
 		}
 	}
+}
+
+func registerCommands(r *cmdroute.Router) {
+	messageAdapter := adapter.NewMessageAdapter()
+	pingHandler := pinghandler.NewPingHandler(
+		messageAdapter,
+		pingcommand.NewPingCommand(),
+	)
+
+	r.AddFunc("ping", pingHandler.HandleCommand)
 }

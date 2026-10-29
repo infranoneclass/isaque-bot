@@ -22,18 +22,6 @@
             }
           },
           {
-            "id": "01fbc0354f01679f",
-            "type": "leaf",
-            "state": {
-              "type": "excalidraw",
-              "state": {
-                "file": "Excalidraw/Arquitetura.md"
-              },
-              "icon": "excalidraw-icon",
-              "title": "Arquitetura"
-            }
-          },
-          {
             "id": "9e14947503aabc3b",
             "type": "leaf",
             "state": {
@@ -216,11 +204,11 @@
       "obsidian-excalidraw-plugin:New drawing": false
     }
   },
-  "active": "01fbc0354f01679f",
+  "active": "9e14947503aabc3b",
   "lastOpenFiles": [
-    "Links uteis.md",
     "Comandos.md",
     "Excalidraw/Arquitetura.md",
+    "Links uteis.md",
     "Excalidraw",
     "Welcome.md"
   ]

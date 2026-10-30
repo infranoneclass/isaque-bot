@@ -5,6 +5,7 @@ import (
 
 	"github.com/diamondburned/arikawa/v3/api"
 	"github.com/diamondburned/arikawa/v3/api/cmdroute"
+	"github.com/diamondburned/arikawa/v3/gateway"
 	"github.com/infranoneclass/isaque-bot/internal/application"
 )
 
@@ -14,10 +15,12 @@ type CommandRegistry struct {
 }
 
 type InputMapper func(cmdroute.CommandData) application.CommandInput
+type IntentsMapper func() []gateway.Intents
 
 type CommandBinding struct {
 	Command     application.Command
 	InputMapper InputMapper
+	Intents     []gateway.Intents
 }
 
 func NewCommandRegistry(router *cmdroute.Router, presenter *ResponsePresenter) *CommandRegistry {
@@ -27,10 +30,11 @@ func NewCommandRegistry(router *cmdroute.Router, presenter *ResponsePresenter) *
 	}
 }
 
-func Bind(command application.Command, inputMapper InputMapper) CommandBinding {
+func Bind(command application.Command, inputMapper InputMapper, intents []gateway.Intents) CommandBinding {
 	return CommandBinding{
 		Command:     command,
 		InputMapper: inputMapper,
+		Intents:     intents,
 	}
 }
 

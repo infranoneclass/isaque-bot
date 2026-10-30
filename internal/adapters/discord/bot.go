@@ -20,7 +20,12 @@ func NewBot(token string, commands []CommandBinding) *Bot {
 
 	botState := state.New("Bot " + token)
 	botState.AddInteractionHandler(router)
-	botState.AddIntents(gateway.IntentGuilds)
+
+	var intents gateway.Intents
+	for _, command := range commands {
+		intents |= MergeIntents(command.Intents...)
+	}
+	botState.AddIntents(intents)
 
 	return &Bot{
 		state:       botState,

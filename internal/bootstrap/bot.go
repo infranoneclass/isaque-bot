@@ -3,9 +3,9 @@ package bootstrap
 import (
 	pingadapter "github.com/infranoneclass/isaque-bot/internal/adapters/commands/ping"
 	"github.com/infranoneclass/isaque-bot/internal/adapters/discord"
-	messagecreateadapter "github.com/infranoneclass/isaque-bot/internal/adapters/events/message_create"
+	honeypotadapter "github.com/infranoneclass/isaque-bot/internal/adapters/events/honeypot"
 	pingcommand "github.com/infranoneclass/isaque-bot/internal/application/commands/ping"
-	messagecreatehandler "github.com/infranoneclass/isaque-bot/internal/application/events/message_create"
+	honeypothandler "github.com/infranoneclass/isaque-bot/internal/application/events/honeypot"
 )
 
 func NewDiscordBot(config Config) *discord.Bot {
@@ -14,7 +14,7 @@ func NewDiscordBot(config Config) *discord.Bot {
 	}
 
 	eventHandlers := []discord.EventHandlerBinding{
-		discord.BindEventHandler(messagecreatehandler.New(), messagecreateadapter.InputMapper, messagecreateadapter.Intents()),
+		discord.BindEventHandler(honeypothandler.New(), honeypotadapter.InputMapper, honeypotadapter.Intents()),
 	}
 
 	return discord.NewBot(config.BotToken, commands, eventHandlers)

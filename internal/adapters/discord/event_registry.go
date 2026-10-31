@@ -1,6 +1,8 @@
 package discord
 
 import (
+	"log"
+
 	"github.com/diamondburned/arikawa/v3/gateway"
 	"github.com/diamondburned/arikawa/v3/state"
 	"github.com/infranoneclass/isaque-bot/internal/application"
@@ -31,7 +33,10 @@ type eventHandlerBinding[T any] struct {
 
 func (b eventHandlerBinding[T]) register(registry *EventHandlerRegistry) {
 	registry.state.AddHandler(func(data T) {
-		b.handler.Execute(b.inputMapper(data))
+		err := b.handler.Execute(b.inputMapper(data))
+		if err != nil {
+			log.Printf("Error processing event %T: %e", data, err)
+		}
 	})
 }
 

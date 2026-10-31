@@ -26,10 +26,10 @@ func NewBot(token string, commands []CommandBinding, eventHandlers []EventHandle
 
 	var intents gateway.Intents
 	for _, command := range commands {
-		intents |= MergeIntents(command.Intents...)
+		intents |= MergeIntents(command.Intents()...)
 	}
 	for _, handler := range eventHandlers {
-		intents |= MergeIntents(handler.Intents...)
+		intents |= MergeIntents(handler.Intents()...)
 	}
 	botState.AddIntents(intents)
 

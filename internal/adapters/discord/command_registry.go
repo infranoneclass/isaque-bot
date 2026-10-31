@@ -17,9 +17,9 @@ type CommandRegistry struct {
 type CommandInputMapper func(cmdroute.CommandData) application.CommandInput
 
 type CommandBinding struct {
-	Command     application.Command
-	InputMapper CommandInputMapper
-	Intents     []gateway.Intents
+	command     application.Command
+	inputMapper CommandInputMapper
+	intents     []gateway.Intents
 }
 
 func NewCommandRegistry(router *cmdroute.Router, presenter *ResponsePresenter) *CommandRegistry {
@@ -29,11 +29,15 @@ func NewCommandRegistry(router *cmdroute.Router, presenter *ResponsePresenter) *
 	}
 }
 
+func (c CommandBinding) Intents() []gateway.Intents {
+	return c.intents
+}
+
 func BindCommand(command application.Command, inputMapper CommandInputMapper, intents []gateway.Intents) CommandBinding {
 	return CommandBinding{
-		Command:     command,
-		InputMapper: inputMapper,
-		Intents:     intents,
+		command:     command,
+		inputMapper: inputMapper,
+		intents:     intents,
 	}
 }
 
@@ -41,7 +45,7 @@ func (r *CommandRegistry) Register(bindings []CommandBinding) []api.CreateComman
 	definitions := make([]api.CreateCommandData, 0, len(bindings))
 
 	for _, binding := range bindings {
-		definition := binding.Command.Definition()
+		definition := binding.command.Definition()
 		definitions = append(definitions, api.CreateCommandData{
 			Name:        definition.Name,
 			Description: definition.Description,
@@ -55,8 +59,8 @@ func (r *CommandRegistry) Register(bindings []CommandBinding) []api.CreateComman
 
 func (r *CommandRegistry) register(binding CommandBinding, name string) {
 	r.router.AddFunc(name, func(ctx context.Context, data cmdroute.CommandData) *api.InteractionResponseData {
-		input := binding.InputMapper(data)
-		response, err := binding.Command.Execute(ctx, input)
+		input := binding.inputMapper(data)
+		response, err := binding.command.Execute(ctx, input)
 		if err != nil {
 			return r.presenter.Error()
 		}

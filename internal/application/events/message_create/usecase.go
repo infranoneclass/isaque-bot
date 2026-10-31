@@ -13,5 +13,5 @@ func New() *UseCase {
 }
 
 func (u *UseCase) Execute(input application.EventHandlerInput) {
-	log.Println(input.Options["UserID"], "sent message at channel ", input.Options["ChannelID"])
+	log.Println(input.UserID, "sent message at channel ", input.ChannelID)
 }

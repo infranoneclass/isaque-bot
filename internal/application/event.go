@@ -5,5 +5,7 @@ type EventHandler interface {
 }
 
 type EventHandlerInput struct {
-	Options map[string]any
+	UserID    uint64
+	ChannelID uint64
+	GuildID   uint64
 }

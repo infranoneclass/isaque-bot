@@ -7,11 +7,9 @@ import (
 
 func InputMapper(event *gateway.MessageCreateEvent) application.EventHandlerInput {
 	return application.EventHandlerInput{
-		Options: map[string]any{
-			"ChannelID": event.ChannelID,
-			"GuildID":   event.GuildID,
-			"UserID":    event.Author.ID,
-		},
+		ChannelID: uint64(event.ChannelID),
+		GuildID:   uint64(event.GuildID),
+		UserID:    uint64(event.Author.ID),
 	}
 }
 

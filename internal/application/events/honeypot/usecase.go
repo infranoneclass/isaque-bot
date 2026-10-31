@@ -14,7 +14,7 @@ func New() *UseCase {
 }
 
 func (u *UseCase) Execute(input application.EventHandlerInput) error {
-	if !slices.Contains(HoneypotIDs, input.ChannelID) {
+	if !slices.Contains(GetHoneypotChannels(), input.ChannelID) {
 		return nil
 	}
 

@@ -14,12 +14,11 @@ type CommandRegistry struct {
 	presenter *ResponsePresenter
 }
 
-type InputMapper func(cmdroute.CommandData) application.CommandInput
-type IntentsMapper func() []gateway.Intents
+type CommandInputMapper func(cmdroute.CommandData) application.CommandInput
 
 type CommandBinding struct {
 	Command     application.Command
-	InputMapper InputMapper
+	InputMapper CommandInputMapper
 	Intents     []gateway.Intents
 }
 
@@ -30,7 +29,7 @@ func NewCommandRegistry(router *cmdroute.Router, presenter *ResponsePresenter) *
 	}
 }
 
-func Bind(command application.Command, inputMapper InputMapper, intents []gateway.Intents) CommandBinding {
+func BindCommand(command application.Command, inputMapper CommandInputMapper, intents []gateway.Intents) CommandBinding {
 	return CommandBinding{
 		Command:     command,
 		InputMapper: inputMapper,

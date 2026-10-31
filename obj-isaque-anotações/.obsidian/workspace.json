@@ -20,8 +20,21 @@
               "icon": "lucide-file",
               "title": "Comandos"
             }
+          },
+          {
+            "id": "ad64208123286d79",
+            "type": "leaf",
+            "state": {
+              "type": "excalidraw",
+              "state": {
+                "file": "Excalidraw/Drawing 2026-10-31 08.47.24.excalidraw.md"
+              },
+              "icon": "excalidraw-icon",
+              "title": "Drawing 2026-10-31 08.47.24.excalidraw"
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -189,10 +202,12 @@
       "obsidian-excalidraw-plugin:New drawing": false
     }
   },
-  "active": "9e14947503aabc3b",
+  "active": "ad64208123286d79",
   "lastOpenFiles": [
-    "Links uteis.md",
     "Comandos.md",
+    "Excalidraw/Drawing 2026-10-31 08.47.24.excalidraw.md",
+    "Excalidraw/Untitled.md",
+    "Links uteis.md",
     "Excalidraw/Arquitetura.md",
     "Excalidraw",
     "Welcome.md"

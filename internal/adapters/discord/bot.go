@@ -7,6 +7,11 @@ import (
 	"github.com/diamondburned/arikawa/v3/api/cmdroute"
 	"github.com/diamondburned/arikawa/v3/gateway"
 	"github.com/diamondburned/arikawa/v3/state"
+
+	pingadapter "github.com/infranoneclass/isaque-bot/internal/adapters/commands/ping"
+	honeypotadapter "github.com/infranoneclass/isaque-bot/internal/adapters/events/honeypot"
+	pingcommand "github.com/infranoneclass/isaque-bot/internal/application/commands/ping"
+	honeypothandler "github.com/infranoneclass/isaque-bot/internal/application/events/honeypot"
 )
 
 type Bot struct {
@@ -14,8 +19,20 @@ type Bot struct {
 	commands []api.CreateCommandData
 }
 
-func NewBot(token string, commands []CommandBinding, eventHandlers []EventHandlerBinding) *Bot {
+func NewBot(token string) *Bot {
 	botState := state.New("Bot " + token)
+
+	commands := []CommandBinding{
+		BindCommand(pingcommand.New(), pingadapter.InputMapper, pingadapter.Intents()),
+	}
+
+	discordService := NewDiscordServiceAdapter(botState)
+
+	eventHandlers := []EventHandlerBinding{
+		BindEventHandler(honeypothandler.New(
+			discordService,
+		), honeypotadapter.InputMapper, honeypotadapter.Intents()),
+	}
 
 	router := cmdroute.NewRouter()
 	commandRegistry := NewCommandRegistry(router, NewResponsePresenter())

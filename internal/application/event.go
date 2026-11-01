@@ -1,6 +1,8 @@
 package application
 
-import "github.com/infranoneclass/isaque-bot/internal/shared"
+import (
+	"github.com/infranoneclass/isaque-bot/internal/shared"
+)
 
 type EventHandler interface {
 	Execute(input EventHandlerInput) error

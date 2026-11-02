@@ -23,25 +23,25 @@ func (u *UseCase) Execute(input application.EventHandlerInput) error {
 		return nil
 	}
 
-	log.Println("user", input.UserID, "sent message at honeypot channel", input.ChannelID)
+	log.Printf("user %s (%d) sent message at honeypot channel %d", input.Username, input.UserID, input.ChannelID)
 
 	privileged, err := u.discordService.UserIsPrivileged(input.GuildID, input.UserID)
 	if err != nil {
-		log.Println("could not get user", input.UserID, "roles")
+		log.Printf("could not get user %s (%d) roles", input.Username, input.UserID)
 		return err
 	}
 
 	if privileged {
-		log.Println("user", input.UserID, "has privileged roles, so they won't be banned")
+		log.Printf("user %s (%d) has privileged roles, so they won't be banned", input.Username, input.UserID)
 		return nil
 	}
 
-	// if err = u.discordService.Ban(input.GuildID, input.UserID, "Mensagem enviada em canal proibido (honeypot)", 1); err != nil {
-	// 	log.Println("Could not ban user", input.UserID, ":", err.Error())
-	// 	return err
-	// }
+	if err = u.discordService.Ban(input.GuildID, input.UserID, "Mensagem enviada em canal proibido (honeypot)", 1); err != nil {
+		log.Printf("Could not ban user %s (%d): %e", input.Username, input.UserID, err)
+		return err
+	}
 
-	log.Println("user", input.UserID, "was banned")
+	log.Printf("user %s (%d) was banned", input.Username, input.UserID)
 
 	return nil
 }

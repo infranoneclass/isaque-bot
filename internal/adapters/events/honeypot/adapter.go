@@ -11,6 +11,7 @@ func InputMapper(event *gateway.MessageCreateEvent) application.EventHandlerInpu
 		ChannelID: shared.ChannelID(event.ChannelID),
 		GuildID:   shared.GuildID(event.GuildID),
 		UserID:    shared.UserID(event.Author.ID),
+		Username:  event.Author.Username,
 	}
 }
 

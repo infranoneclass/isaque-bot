@@ -10,6 +10,7 @@ type EventHandler interface {
 
 type EventHandlerInput struct {
 	UserID    shared.UserID
+	Username  string
 	ChannelID shared.ChannelID
 	GuildID   shared.GuildID
 }

@@ -9,30 +9,56 @@ import (
 )
 
 func TestExecute(t *testing.T) {
-	useCase := ping.New()
-
-	response, err := useCase.Execute(context.Background(), application.CommandInput{})
-	if err != nil {
-		t.Fatalf("Execute() error = %v", err)
+	tests := []struct {
+		name  string
+		input application.CommandInput
+		want  application.Response
+	}{
+		{
+			name:  "without options",
+			input: application.CommandInput{},
+			want:  application.Response{Content: "Pong!"},
+		},
+		{
+			name:  "with options",
+			input: application.CommandInput{Options: map[string]string{"ignored": "value"}},
+			want:  application.Response{Content: "Pong!"},
+		},
 	}
 
-	if response.Content != "Pong!" {
-		t.Errorf("response.Content = %q, want %q", response.Content, "Pong!")
-	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			response, err := ping.New().Execute(context.Background(), tt.input)
+			if err != nil {
+				t.Fatalf("Execute() error = %v", err)
+			}
 
-	if response.Ephemeral {
-		t.Error("response.Ephemeral = true, want false")
+			if response != tt.want {
+				t.Errorf("Execute() response = %+v, want %+v", response, tt.want)
+			}
+		})
 	}
 }
 
 func TestDefinition(t *testing.T) {
-	definition := ping.New().Definition()
-
-	if definition.Name != "ping" {
-		t.Errorf("definition.Name = %q, want %q", definition.Name, "ping")
+	tests := []struct {
+		name string
+		want application.CommandDefinition
+	}{
+		{
+			name: "ping command definition",
+			want: application.CommandDefinition{
+				Name:        "ping",
+				Description: "Ping!",
+			},
+		},
 	}
 
-	if definition.Description != "Ping!" {
-		t.Errorf("definition.Description = %q, want %q", definition.Description, "Ping!")
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if definition := ping.New().Definition(); definition != tt.want {
+				t.Errorf("Definition() = %+v, want %+v", definition, tt.want)
+			}
+		})
 	}
 }

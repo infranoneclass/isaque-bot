@@ -1,0 +1,10 @@
+.git
+.gitignore
+.dockerignore
+.env
+.vscode
+obj-isaque-anotações
+*.md
+*.test
+*.out
+coverage.*

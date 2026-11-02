@@ -114,6 +114,69 @@ func (_c *MockDiscordService_Ban_Call) RunAndReturn(run func(guildID shared.Guil
 	return _c
 }
 
+// Unban provides a mock function for the type MockDiscordService
+func (_mock *MockDiscordService) Unban(guildID shared.GuildID, userID shared.UserID, reason string) error {
+	ret := _mock.Called(guildID, userID, reason)
+
+	if len(ret) == 0 {
+		panic("no return value specified for Unban")
+	}
+
+	var r0 error
+	if returnFunc, ok := ret.Get(0).(func(shared.GuildID, shared.UserID, string) error); ok {
+		r0 = returnFunc(guildID, userID, reason)
+	} else {
+		r0 = ret.Error(0)
+	}
+	return r0
+}
+
+// MockDiscordService_Unban_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Unban'
+type MockDiscordService_Unban_Call struct {
+	*mock.Call
+}
+
+// Unban is a helper method to define mock.On call
+//   - guildID shared.GuildID
+//   - userID shared.UserID
+//   - reason string
+func (_e *MockDiscordService_Expecter) Unban(guildID any, userID any, reason any) *MockDiscordService_Unban_Call {
+	return &MockDiscordService_Unban_Call{Call: _e.mock.On("Unban", guildID, userID, reason)}
+}
+
+func (_c *MockDiscordService_Unban_Call) Run(run func(guildID shared.GuildID, userID shared.UserID, reason string)) *MockDiscordService_Unban_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 shared.GuildID
+		if args[0] != nil {
+			arg0 = args[0].(shared.GuildID)
+		}
+		var arg1 shared.UserID
+		if args[1] != nil {
+			arg1 = args[1].(shared.UserID)
+		}
+		var arg2 string
+		if args[2] != nil {
+			arg2 = args[2].(string)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+		)
+	})
+	return _c
+}
+
+func (_c *MockDiscordService_Unban_Call) Return(err error) *MockDiscordService_Unban_Call {
+	_c.Call.Return(err)
+	return _c
+}
+
+func (_c *MockDiscordService_Unban_Call) RunAndReturn(run func(guildID shared.GuildID, userID shared.UserID, reason string) error) *MockDiscordService_Unban_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // UserIsPrivileged provides a mock function for the type MockDiscordService
 func (_mock *MockDiscordService) UserIsPrivileged(guildID shared.GuildID, userID shared.UserID) (bool, error) {
 	ret := _mock.Called(guildID, userID)

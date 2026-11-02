@@ -5,24 +5,29 @@ import (
 	"os"
 	"strings"
 
+	"github.com/infranoneclass/isaque-bot/internal/repositories"
 	"github.com/joho/godotenv"
 )
 
-type Config struct {
-	BotToken string
-}
+func LoadConfig() (*repositories.Config, error) {
+	config := repositories.NewConfigRepository()
 
-func LoadConfig() (Config, error) {
 	if strings.TrimSpace(os.Getenv("BOT_PRIVATE_TOKEN")) == "" {
 		if err := godotenv.Load(); err != nil {
-			return Config{}, fmt.Errorf("load environment file: %w", err)
+			return config, fmt.Errorf("load environment file: %w", err)
 		}
 	}
 
-	config := Config{BotToken: strings.TrimSpace(os.Getenv("BOT_PRIVATE_TOKEN"))}
+	config.BindBotToken(strings.TrimSpace(os.Getenv("BOT_PRIVATE_TOKEN")))
 	if config.BotToken == "" {
-		return Config{}, fmt.Errorf("BOT_PRIVATE_TOKEN is required")
+		return config, fmt.Errorf("BOT_PRIVATE_TOKEN is required")
 	}
+
+	jsonConfigFile, err := os.ReadFile("configs.json")
+	if err != nil {
+		return config, fmt.Errorf("could not load configs file: %e", err)
+	}
+	err = config.BindFromJSONFile(jsonConfigFile)
 
 	return config, nil
 }

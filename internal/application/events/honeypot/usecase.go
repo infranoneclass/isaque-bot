@@ -1,20 +1,23 @@
 package honeypot
 
 import (
+	"fmt"
 	"log"
 	"slices"
 
 	"github.com/infranoneclass/isaque-bot/internal/application"
-	port "github.com/infranoneclass/isaque-bot/internal/ports/honeypot"
+	port "github.com/infranoneclass/isaque-bot/internal/ports"
 )
 
 type UseCase struct {
 	discordService port.DiscordService
+	configs        port.ConfigRepository
 }
 
-func New(discordService port.DiscordService) *UseCase {
+func New(discordService port.DiscordService, configs port.ConfigRepository) *UseCase {
 	return &UseCase{
 		discordService: discordService,
+		configs:        configs,
 	}
 }
 
@@ -42,6 +45,14 @@ func (u *UseCase) Execute(input application.EventHandlerInput) error {
 	}
 
 	log.Printf("user %s (%d) was banned", input.Username, input.UserID)
+
+	if u.configs.GetIfHoneypotOnlyKicks() {
+		err = u.discordService.Unban(input.GuildID, input.UserID, fmt.Sprintf("Usuário %s (%d) desbanido pois a feature de honeypot está em testes", input.Username, input.UserID))
+		if err != nil {
+			log.Printf("could not unban user %s (%d): %e", input.Username, input.UserID, err)
+		}
+		log.Printf("user %s (%d) was unbanned because honeypot is in test mode", input.Username, input.UserID)
+	}
 
 	return nil
 }

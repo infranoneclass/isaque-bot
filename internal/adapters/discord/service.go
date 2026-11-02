@@ -46,6 +46,13 @@ func (a *discordServiceAdapter) Ban(guildID shared.GuildID, userID shared.UserID
 	})
 }
 
+func (a *discordServiceAdapter) Unban(guildID shared.GuildID, userID shared.UserID, reason string) error {
+	discordUserID := discord.UserID(userID)
+	discordGuildID := discord.GuildID(guildID)
+
+	return a.state.Unban(discordGuildID, discordUserID, api.AuditLogReason(reason))
+}
+
 func roleIsPrivileged(role discord.Role) bool {
 	userCanBanMembers := (role.Permissions & discord.PermissionBanMembers) != 0
 	userIsAdmin := (role.Permissions & discord.PermissionAdministrator) != 0

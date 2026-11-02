@@ -12,15 +12,17 @@ import (
 	honeypotadapter "github.com/infranoneclass/isaque-bot/internal/adapters/events/honeypot"
 	pingcommand "github.com/infranoneclass/isaque-bot/internal/application/commands/ping"
 	honeypothandler "github.com/infranoneclass/isaque-bot/internal/application/events/honeypot"
+	"github.com/infranoneclass/isaque-bot/internal/repositories"
 )
 
 type Bot struct {
 	state    *state.State
+	configs  *repositories.Config
 	commands []api.CreateCommandData
 }
 
-func NewBot(token string) *Bot {
-	botState := state.New("Bot " + token)
+func NewBot(configs *repositories.Config) *Bot {
+	botState := state.New("Bot " + configs.BotToken)
 
 	commands := []CommandBinding{
 		BindCommand(pingcommand.New(), pingadapter.InputMapper, pingadapter.Intents()),
@@ -31,6 +33,7 @@ func NewBot(token string) *Bot {
 	eventHandlers := []EventHandlerBinding{
 		BindEventHandler(honeypothandler.New(
 			discordService,
+			configs,
 		), honeypotadapter.InputMapper, honeypotadapter.Intents()),
 	}
 
@@ -52,6 +55,7 @@ func NewBot(token string) *Bot {
 
 	return &Bot{
 		state:    botState,
+		configs:  configs,
 		commands: commandRegistry.Register(commands),
 	}
 }

@@ -2,11 +2,12 @@ package honeypot_test
 
 import (
 	"errors"
+	"fmt"
 	"testing"
 
 	"github.com/infranoneclass/isaque-bot/internal/application"
 	"github.com/infranoneclass/isaque-bot/internal/application/events/honeypot"
-	"github.com/infranoneclass/isaque-bot/internal/ports/honeypot/mocks"
+	"github.com/infranoneclass/isaque-bot/internal/ports/mocks"
 	"github.com/infranoneclass/isaque-bot/internal/shared"
 )
 
@@ -16,7 +17,7 @@ func TestExecute(t *testing.T) {
 	tests := []struct {
 		name    string
 		input   application.EventHandlerInput
-		setup   func(*mocks.MockDiscordService, application.EventHandlerInput)
+		setup   func(*mocks.MockDiscordService, *mocks.MockConfigRepository, application.EventHandlerInput)
 		wantErr error
 	}{
 		{
@@ -34,7 +35,7 @@ func TestExecute(t *testing.T) {
 				UserID:    shared.UserID(2),
 				ChannelID: honeypot.OBJ_ISAQUE_CHANNEL_ID,
 			},
-			setup: func(discordService *mocks.MockDiscordService, input application.EventHandlerInput) {
+			setup: func(discordService *mocks.MockDiscordService, configsRepository *mocks.MockConfigRepository, input application.EventHandlerInput) {
 				discordService.EXPECT().UserIsPrivileged(input.GuildID, input.UserID).Return(false, serviceErr)
 			},
 			wantErr: serviceErr,
@@ -46,7 +47,7 @@ func TestExecute(t *testing.T) {
 				UserID:    shared.UserID(2),
 				ChannelID: honeypot.NONECLASS_CHANNEL_ID,
 			},
-			setup: func(discordService *mocks.MockDiscordService, input application.EventHandlerInput) {
+			setup: func(discordService *mocks.MockDiscordService, configsRepository *mocks.MockConfigRepository, input application.EventHandlerInput) {
 				discordService.EXPECT().UserIsPrivileged(input.GuildID, input.UserID).Return(true, nil)
 			},
 		},
@@ -57,9 +58,11 @@ func TestExecute(t *testing.T) {
 				UserID:    shared.UserID(2),
 				ChannelID: honeypot.OBJ_ISAQUE_CHANNEL_ID,
 			},
-			setup: func(discordService *mocks.MockDiscordService, input application.EventHandlerInput) {
+			setup: func(discordService *mocks.MockDiscordService, configsRepository *mocks.MockConfigRepository, input application.EventHandlerInput) {
 				discordService.EXPECT().UserIsPrivileged(input.GuildID, input.UserID).Return(false, nil)
+				configsRepository.EXPECT().GetIfHoneypotOnlyKicks().Return(true)
 				discordService.EXPECT().Ban(input.GuildID, input.UserID, "Mensagem enviada em canal proibido (honeypot)", uint(1)).Return(nil)
+				discordService.EXPECT().Unban(input.GuildID, input.UserID, fmt.Sprintf("Usuário %s (%d) desbanido pois a feature de honeypot está em testes", input.Username, input.UserID)).Return(nil)
 			},
 		},
 		{
@@ -69,7 +72,7 @@ func TestExecute(t *testing.T) {
 				UserID:    shared.UserID(2),
 				ChannelID: honeypot.NONECLASS_CHANNEL_ID,
 			},
-			setup: func(discordService *mocks.MockDiscordService, input application.EventHandlerInput) {
+			setup: func(discordService *mocks.MockDiscordService, configsRepository *mocks.MockConfigRepository, input application.EventHandlerInput) {
 				discordService.EXPECT().UserIsPrivileged(input.GuildID, input.UserID).Return(false, nil)
 				discordService.EXPECT().Ban(input.GuildID, input.UserID, "Mensagem enviada em canal proibido (honeypot)", uint(1)).Return(banErr)
 			},
@@ -80,11 +83,12 @@ func TestExecute(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			discordService := mocks.NewMockDiscordService(t)
+			configsRepository := mocks.NewMockConfigRepository(t)
 			if tt.setup != nil {
-				tt.setup(discordService, tt.input)
+				tt.setup(discordService, configsRepository, tt.input)
 			}
 
-			err := honeypot.New(discordService).Execute(tt.input)
+			err := honeypot.New(discordService, configsRepository).Execute(tt.input)
 			if !errors.Is(err, tt.wantErr) {
 				t.Errorf("Execute() error = %v, want %v", err, tt.wantErr)
 			}

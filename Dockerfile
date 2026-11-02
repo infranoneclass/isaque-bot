@@ -17,4 +17,5 @@ WORKDIR /app
 COPY --from=builder /out/isaque-bot ./isaque-bot
 
 USER appuser
-ENTRYPOINT ["./isaque-bot"]
+STOPSIGNAL SIGTERM
+ENTRYPOINT ["/app/isaque-bot"]

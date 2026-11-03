@@ -14,7 +14,8 @@ RUN apk add --no-cache ca-certificates \
     && adduser -D -H -u 10001 appuser
 
 WORKDIR /app
-COPY --from=builder /out/isaque-bot ./isaque-bot
+COPY --from=builder --chown=10001 /out/isaque-bot ./isaque-bot
+COPY --chown=10001 configs.json .
 
 USER appuser
 ENTRYPOINT ["./isaque-bot"]

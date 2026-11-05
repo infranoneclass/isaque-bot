@@ -6,15 +6,15 @@ import (
 	"slices"
 
 	"github.com/infranoneclass/isaque-bot/internal/application"
-	port "github.com/infranoneclass/isaque-bot/internal/ports"
+	"github.com/infranoneclass/isaque-bot/internal/ports"
 )
 
 type UseCase struct {
-	discordService port.DiscordService
-	configs        port.ConfigRepository
+	discordService ports.DiscordService
+	configs        ports.ConfigRepository
 }
 
-func New(discordService port.DiscordService, configs port.ConfigRepository) *UseCase {
+func New(discordService ports.DiscordService, configs ports.ConfigRepository) *UseCase {
 	return &UseCase{
 		discordService: discordService,
 		configs:        configs,

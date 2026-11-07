@@ -38,7 +38,8 @@ func NewBot(configs *repositories.Config) *Bot {
 			configs,
 		), honeypotadapter.InputMapper, honeypotadapter.Intents()),
 
-		BindEventHandler(autorolehandler.NewAddReaction(discordService), autoroleadapter.ReactionAddInputMapper, autoroleadapter.Intents()),
+		BindEventHandler(autorolehandler.NewReactionAdd(discordService), autoroleadapter.ReactionAddInputMapper, autoroleadapter.Intents()),
+		BindEventHandler(autorolehandler.NewReactionRemove(discordService), autoroleadapter.ReactionRemoveInputMapper, autoroleadapter.Intents()),
 	}
 
 	router := cmdroute.NewRouter()

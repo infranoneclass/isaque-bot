@@ -7,4 +7,5 @@ type DiscordService interface {
 	Unban(guildID shared.GuildID, userID shared.UserID, reason string) error
 	UserIsPrivileged(guildID shared.GuildID, userID shared.UserID) (bool, error)
 	AddRole(guildID shared.GuildID, userID shared.UserID, roleID shared.RoleID, reason string) error
+	RemoveRole(guildID shared.GuildID, userID shared.UserID, roleID shared.RoleID, reason string) error
 }

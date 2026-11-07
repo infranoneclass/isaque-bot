@@ -69,6 +69,19 @@ func (a *discordServiceAdapter) AddRole(guildID shared.GuildID, userID shared.Us
 	return nil
 }
 
+func (a *discordServiceAdapter) RemoveRole(guildID shared.GuildID, userID shared.UserID, roleID shared.RoleID, reason string) error {
+	discordGuildID := discord.GuildID(guildID)
+	discordUserID := discord.UserID(userID)
+	discordRoleID := discord.RoleID(roleID)
+
+	err := a.state.RemoveRole(discordGuildID, discordUserID, discordRoleID, api.AuditLogReason(reason))
+	if err != nil {
+		log.Printf("Could not remove role from user %d: %s", userID, err.Error())
+		return err
+	}
+	return nil
+}
+
 func roleIsPrivileged(role discord.Role) bool {
 	userCanBanMembers := (role.Permissions & discord.PermissionBanMembers) != 0
 	userIsAdmin := (role.Permissions & discord.PermissionAdministrator) != 0

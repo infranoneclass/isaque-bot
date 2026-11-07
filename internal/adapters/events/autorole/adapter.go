@@ -15,6 +15,15 @@ func ReactionAddInputMapper(event *gateway.MessageReactionAddEvent) application.
 	}
 }
 
+func ReactionRemoveInputMapper(event *gateway.MessageReactionRemoveEvent) application.EventHandlerInput {
+	return application.EventHandlerInput{
+		GuildID:   shared.GuildID(event.GuildID),
+		MessageID: shared.MessageID(event.MessageID),
+		UserID:    shared.UserID(event.UserID),
+		EmojiID:   shared.EmojiID(event.Emoji.ID),
+	}
+}
+
 func Intents() []gateway.Intents {
 	return []gateway.Intents{
 		gateway.IntentGuildMessageReactions,

@@ -183,6 +183,75 @@ func (_c *MockDiscordService_Ban_Call) RunAndReturn(run func(guildID shared.Guil
 	return _c
 }
 
+// RemoveRole provides a mock function for the type MockDiscordService
+func (_mock *MockDiscordService) RemoveRole(guildID shared.GuildID, userID shared.UserID, roleID shared.RoleID, reason string) error {
+	ret := _mock.Called(guildID, userID, roleID, reason)
+
+	if len(ret) == 0 {
+		panic("no return value specified for RemoveRole")
+	}
+
+	var r0 error
+	if returnFunc, ok := ret.Get(0).(func(shared.GuildID, shared.UserID, shared.RoleID, string) error); ok {
+		r0 = returnFunc(guildID, userID, roleID, reason)
+	} else {
+		r0 = ret.Error(0)
+	}
+	return r0
+}
+
+// MockDiscordService_RemoveRole_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'RemoveRole'
+type MockDiscordService_RemoveRole_Call struct {
+	*mock.Call
+}
+
+// RemoveRole is a helper method to define mock.On call
+//   - guildID shared.GuildID
+//   - userID shared.UserID
+//   - roleID shared.RoleID
+//   - reason string
+func (_e *MockDiscordService_Expecter) RemoveRole(guildID any, userID any, roleID any, reason any) *MockDiscordService_RemoveRole_Call {
+	return &MockDiscordService_RemoveRole_Call{Call: _e.mock.On("RemoveRole", guildID, userID, roleID, reason)}
+}
+
+func (_c *MockDiscordService_RemoveRole_Call) Run(run func(guildID shared.GuildID, userID shared.UserID, roleID shared.RoleID, reason string)) *MockDiscordService_RemoveRole_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 shared.GuildID
+		if args[0] != nil {
+			arg0 = args[0].(shared.GuildID)
+		}
+		var arg1 shared.UserID
+		if args[1] != nil {
+			arg1 = args[1].(shared.UserID)
+		}
+		var arg2 shared.RoleID
+		if args[2] != nil {
+			arg2 = args[2].(shared.RoleID)
+		}
+		var arg3 string
+		if args[3] != nil {
+			arg3 = args[3].(string)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+		)
+	})
+	return _c
+}
+
+func (_c *MockDiscordService_RemoveRole_Call) Return(err error) *MockDiscordService_RemoveRole_Call {
+	_c.Call.Return(err)
+	return _c
+}
+
+func (_c *MockDiscordService_RemoveRole_Call) RunAndReturn(run func(guildID shared.GuildID, userID shared.UserID, roleID shared.RoleID, reason string) error) *MockDiscordService_RemoveRole_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // Unban provides a mock function for the type MockDiscordService
 func (_mock *MockDiscordService) Unban(guildID shared.GuildID, userID shared.UserID, reason string) error {
 	ret := _mock.Called(guildID, userID, reason)

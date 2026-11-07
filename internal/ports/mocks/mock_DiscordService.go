@@ -45,6 +45,75 @@ func (_m *MockDiscordService) EXPECT() *MockDiscordService_Expecter {
 	return &MockDiscordService_Expecter{mock: &_m.Mock}
 }
 
+// AddRole provides a mock function for the type MockDiscordService
+func (_mock *MockDiscordService) AddRole(guildID shared.GuildID, userID shared.UserID, roleID shared.RoleID, reason string) error {
+	ret := _mock.Called(guildID, userID, roleID, reason)
+
+	if len(ret) == 0 {
+		panic("no return value specified for AddRole")
+	}
+
+	var r0 error
+	if returnFunc, ok := ret.Get(0).(func(shared.GuildID, shared.UserID, shared.RoleID, string) error); ok {
+		r0 = returnFunc(guildID, userID, roleID, reason)
+	} else {
+		r0 = ret.Error(0)
+	}
+	return r0
+}
+
+// MockDiscordService_AddRole_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'AddRole'
+type MockDiscordService_AddRole_Call struct {
+	*mock.Call
+}
+
+// AddRole is a helper method to define mock.On call
+//   - guildID shared.GuildID
+//   - userID shared.UserID
+//   - roleID shared.RoleID
+//   - reason string
+func (_e *MockDiscordService_Expecter) AddRole(guildID any, userID any, roleID any, reason any) *MockDiscordService_AddRole_Call {
+	return &MockDiscordService_AddRole_Call{Call: _e.mock.On("AddRole", guildID, userID, roleID, reason)}
+}
+
+func (_c *MockDiscordService_AddRole_Call) Run(run func(guildID shared.GuildID, userID shared.UserID, roleID shared.RoleID, reason string)) *MockDiscordService_AddRole_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 shared.GuildID
+		if args[0] != nil {
+			arg0 = args[0].(shared.GuildID)
+		}
+		var arg1 shared.UserID
+		if args[1] != nil {
+			arg1 = args[1].(shared.UserID)
+		}
+		var arg2 shared.RoleID
+		if args[2] != nil {
+			arg2 = args[2].(shared.RoleID)
+		}
+		var arg3 string
+		if args[3] != nil {
+			arg3 = args[3].(string)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+		)
+	})
+	return _c
+}
+
+func (_c *MockDiscordService_AddRole_Call) Return(err error) *MockDiscordService_AddRole_Call {
+	_c.Call.Return(err)
+	return _c
+}
+
+func (_c *MockDiscordService_AddRole_Call) RunAndReturn(run func(guildID shared.GuildID, userID shared.UserID, roleID shared.RoleID, reason string) error) *MockDiscordService_AddRole_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // Ban provides a mock function for the type MockDiscordService
 func (_mock *MockDiscordService) Ban(guildID shared.GuildID, userID shared.UserID, reason string, daysToDelete uint) error {
 	ret := _mock.Called(guildID, userID, reason, daysToDelete)

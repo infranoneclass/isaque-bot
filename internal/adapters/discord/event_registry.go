@@ -35,7 +35,7 @@ func (b eventHandlerBinding[T]) register(registry *EventHandlerRegistry) {
 	registry.state.AddHandler(func(data T) {
 		err := b.handler.Execute(b.inputMapper(data))
 		if err != nil {
-			log.Printf("Error processing event %T: %e", data, err)
+			log.Printf("Error processing event %T: %s", data, err.Error())
 		}
 	})
 }

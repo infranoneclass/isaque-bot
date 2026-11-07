@@ -1,6 +1,7 @@
 package discord
 
 import (
+	"log"
 	"slices"
 
 	"github.com/diamondburned/arikawa/v3/api"
@@ -51,6 +52,21 @@ func (a *discordServiceAdapter) Unban(guildID shared.GuildID, userID shared.User
 	discordGuildID := discord.GuildID(guildID)
 
 	return a.state.Unban(discordGuildID, discordUserID, api.AuditLogReason(reason))
+}
+
+func (a *discordServiceAdapter) AddRole(guildID shared.GuildID, userID shared.UserID, roleID shared.RoleID, reason string) error {
+	discordGuildID := discord.GuildID(guildID)
+	discordUserID := discord.UserID(userID)
+	discordRoleID := discord.RoleID(roleID)
+
+	err := a.state.AddRole(discordGuildID, discordUserID, discordRoleID, api.AddRoleData{
+		AuditLogReason: api.AuditLogReason(reason),
+	})
+	if err != nil {
+		log.Printf("Could not add role to user %d: %s", userID, err.Error())
+		return err
+	}
+	return nil
 }
 
 func roleIsPrivileged(role discord.Role) bool {

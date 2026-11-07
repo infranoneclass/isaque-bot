@@ -9,8 +9,10 @@ import (
 	"github.com/diamondburned/arikawa/v3/state"
 
 	pingadapter "github.com/infranoneclass/isaque-bot/internal/adapters/commands/ping"
+	autoroleadapter "github.com/infranoneclass/isaque-bot/internal/adapters/events/autorole"
 	honeypotadapter "github.com/infranoneclass/isaque-bot/internal/adapters/events/honeypot"
 	pingcommand "github.com/infranoneclass/isaque-bot/internal/application/commands/ping"
+	autorolehandler "github.com/infranoneclass/isaque-bot/internal/application/events/autorole"
 	honeypothandler "github.com/infranoneclass/isaque-bot/internal/application/events/honeypot"
 	"github.com/infranoneclass/isaque-bot/internal/repositories"
 )
@@ -35,6 +37,8 @@ func NewBot(configs *repositories.Config) *Bot {
 			discordService,
 			configs,
 		), honeypotadapter.InputMapper, honeypotadapter.Intents()),
+
+		BindEventHandler(autorolehandler.NewAddReaction(discordService), autoroleadapter.ReactionAddInputMapper, autoroleadapter.Intents()),
 	}
 
 	router := cmdroute.NewRouter()

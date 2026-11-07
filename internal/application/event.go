@@ -13,4 +13,6 @@ type EventHandlerInput struct {
 	Username  string
 	ChannelID shared.ChannelID
 	GuildID   shared.GuildID
+	MessageID shared.MessageID
+	EmojiID   shared.EmojiID
 }
